@@ -1,0 +1,51 @@
+{
+  "name": "rehype-heading-slug",
+  "version": "1.0.0",
+  "description": "A rehype plugin that automatically adds unique id attributes to heading elements (h1–h6), supporting explicit slug notation, Unicode normalization, duplicate and invalid slug handling, flexible id assignment strategies, and compatibility with MDX. Powered by github-slugger.",
+  "author": "adhi-jp",
+  "license": "MIT",
+  "keywords": [
+    "rehype",
+    "slug",
+    "plugin",
+    "heading",
+    "unified",
+    "github-slugger"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adhi-jp/rehype-heading-slug.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adhi-jp/rehype-heading-slug/issues"
+  },
+  "homepage": "https://github.com/adhi-jp/rehype-heading-slug#readme",
+  "type": "module",
+  "main": "index.js",
+  "exports": "./index.js",
+  "types": "lib/types.d.ts",
+  "files": [
+    "index.js",
+    "lib/"
+  ],
+  "packageManager": "pnpm@10.11.1",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/hast": "^3.0.4",
+    "@vitest/coverage-v8": "^3.2.2",
+    "prettier": "^3.5.3",
+    "rehype": "^13.0.2",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.2"
+  },
+  "dependencies": {
+    "github-slugger": "^2.0.0",
+    "unist-util-visit": "^5.0.0"
+  }
+}

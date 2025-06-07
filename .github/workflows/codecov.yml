@@ -1,0 +1,67 @@
+name: Codecov Coverage
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for proper diff comparison
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
+      - name: Check for source/config changes
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_REF="${{ github.event.pull_request.base.sha }}"
+            HEAD_REF="${{ github.sha }}"
+          else
+            BASE_REF="HEAD^"
+            HEAD_REF="HEAD"
+          fi
+
+          echo "Checking changes between $BASE_REF and $HEAD_REF"
+          CHANGED_FILES=$(git diff --name-only $BASE_REF..$HEAD_REF)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # Check if any source files or important config files changed
+          if echo "$CHANGED_FILES" | grep -qE '^(lib/.*|index\.js|tsconfig\.json|package\.json|pnpm-lock\.yaml|test/.*)$'; then
+            echo "Source or config files changed, running tests"
+            echo "run_tests=true" >> $GITHUB_OUTPUT
+          else
+            echo "No source or config files changed, skipping tests"
+            echo "run_tests=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install dependencies
+        if: steps.changes.outputs.run_tests == 'true'
+        run: pnpm install
+
+      - name: Run tests and generate coverage
+        if: steps.changes.outputs.run_tests == 'true'
+        run: pnpm vitest --coverage
+
+      - name: Upload coverage to Codecov
+        if: steps.changes.outputs.run_tests == 'true'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
