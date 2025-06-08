@@ -137,4 +137,4 @@ This project was mainly developed using GitHub Copilot and other generative AI t
 
 ## License
 
-[MIT License](./blob/main/LICENSE) © [adhi-jp](https://github.com/adhi-jp)
+[MIT License](./LICENSE) © [adhi-jp](https://github.com/adhi-jp)
