@@ -1,4 +1,4 @@
-import type { Element, Text, Root, Node, Properties } from "hast";
+import type { Element } from "hast";
 import type Slugger from "github-slugger";
 
 export type HeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";

@@ -23,9 +23,10 @@
   "type": "module",
   "main": "index.js",
   "exports": "./index.js",
-  "types": "lib/types.d.ts",
+  "types": "./index.d.ts",
   "files": [
     "index.js",
+    "index.d.ts",
     "lib/"
   ],
   "packageManager": "pnpm@10.11.1",
