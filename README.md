@@ -1,6 +1,7 @@
 # rehype-heading-slug
 
 [![build status](https://github.com/adhi-jp/rehype-heading-slug/actions/workflows/type-check.yml/badge.svg)](https://github.com/adhi-jp/rehype-heading-slug/actions)
+[![codecov](https://codecov.io/gh/adhi-jp/rehype-heading-slug/branch/main/graph/badge.svg?token=FXHPHX9G66)](https://codecov.io/gh/adhi-jp/rehype-heading-slug)
 [![npm version](https://img.shields.io/npm/v/rehype-heading-slug.svg)](https://www.npmjs.com/package/rehype-heading-slug)
 [![bundle size](https://deno.bundlejs.com/?q=rehype-heading-slug&badge)](https://bundlejs.com/?q=rehype-heading-slug)
 
