@@ -30,9 +30,15 @@ jobs:
       - name: Check for source/config changes
         id: changes
         run: |
-          # Always run tests for tag pushes
+          # Always run tests for tag pushes or manual dispatch
           if [[ "${{ github.ref }}" =~ ^refs/tags/ ]]; then
             echo "Tag push detected, running tests regardless of file changes"
+            echo "run_tests=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual dispatch detected, running tests regardless of file changes"
             echo "run_tests=true" >> $GITHUB_OUTPUT
             exit 0
           fi
