@@ -1,6 +1,6 @@
 {
   "name": "rehype-heading-slug",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A rehype plugin that automatically adds unique id attributes to heading elements (h1–h6), supporting explicit slug notation, Unicode normalization, duplicate and invalid slug handling, flexible id assignment strategies, and compatibility with MDX. Powered by github-slugger.",
   "author": "adhi-jp",
   "license": "MIT",
