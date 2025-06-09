@@ -2,10 +2,8 @@ name: Codecov Coverage
 
 on:
   push:
-    branches: [main]
-    tags: ["*"]
-  pull_request:
-    branches: [main]
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -14,8 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch full history for proper diff comparison
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -23,58 +19,17 @@ jobs:
           node-version: "20"
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
-          version: latest
-
-      - name: Check for source/config changes
-        id: changes
-        run: |
-          # Always run tests for tag pushes or manual dispatch
-          if [[ "${{ github.ref }}" =~ ^refs/tags/ ]]; then
-            echo "Tag push detected, running tests regardless of file changes"
-            echo "run_tests=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Manual dispatch detected, running tests regardless of file changes"
-            echo "run_tests=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            BASE_REF="${{ github.event.pull_request.base.sha }}"
-            HEAD_REF="${{ github.sha }}"
-          else
-            BASE_REF="HEAD^"
-            HEAD_REF="HEAD"
-          fi
-
-          echo "Checking changes between $BASE_REF and $HEAD_REF"
-          CHANGED_FILES=$(git diff --name-only $BASE_REF..$HEAD_REF)
-          echo "Changed files:"
-          echo "$CHANGED_FILES"
-
-          # Check if any source files or important config files changed
-          if echo "$CHANGED_FILES" | grep -qE '^(lib/.*|index\.js|tsconfig\.json|package\.json|pnpm-lock\.yaml|test/.*)$'; then
-            echo "Source or config files changed, running tests"
-            echo "run_tests=true" >> $GITHUB_OUTPUT
-          else
-            echo "No source or config files changed, skipping tests"
-            echo "run_tests=false" >> $GITHUB_OUTPUT
-          fi
+          version: 10.11.1
 
       - name: Install dependencies
-        if: steps.changes.outputs.run_tests == 'true'
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests and generate coverage
-        if: steps.changes.outputs.run_tests == 'true'
-        run: pnpm vitest --coverage
+        run: pnpm run coverage
 
       - name: Upload coverage to Codecov
-        if: steps.changes.outputs.run_tests == 'true'
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
