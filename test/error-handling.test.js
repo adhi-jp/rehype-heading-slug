@@ -75,16 +75,18 @@ describe("Error handling", () => {
     });
 
     it("throws TypeError for invalid assignIdToEmptyHeading", async () => {
-      expect(() => rehypeHeadingSlug({ assignIdToEmptyHeading: "true" })).toThrow(
-        TypeError,
-      );
+      expect(() =>
+        rehypeHeadingSlug({ assignIdToEmptyHeading: "true" }),
+      ).toThrow(TypeError);
     });
 
     it("throws TypeError for invalid strictSlugRegex", () => {
       expect(() => rehypeHeadingSlug({ strictSlugRegex: "true" })).toThrow(
         TypeError,
       );
-      expect(() => rehypeHeadingSlug({ strictSlugRegex: 1 })).toThrow(TypeError);
+      expect(() => rehypeHeadingSlug({ strictSlugRegex: 1 })).toThrow(
+        TypeError,
+      );
     });
 
     it("throws error when slugRegex lacks capture group and strictSlugRegex is true", () => {

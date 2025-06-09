@@ -11,7 +11,9 @@ describe("Empty heading handling", () => {
 
     it("ignores empty headings by default", async () => {
       const input = "<h1></h1>";
-      const result = await processHtml(input, { assignIdToEmptyHeading: false });
+      const result = await processHtml(input, {
+        assignIdToEmptyHeading: false,
+      });
       expect(result).not.toContain("id=");
     });
 

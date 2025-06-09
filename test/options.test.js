@@ -78,7 +78,9 @@ describe("Configuration options", () => {
     });
     it("preserves existing IDs when explicit mode is set", async () => {
       const input = '<h1 id="old-id">New Heading</h1>';
-      const result = await processHtml(input, { existingIdHandling: "explicit" });
+      const result = await processHtml(input, {
+        existingIdHandling: "explicit",
+      });
       expect(result).toContain('<h1 id="old-id">New Heading</h1>');
     });
     it("always overwrites existing IDs when always mode is set", async () => {
