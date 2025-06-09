@@ -1,8 +1,8 @@
 # rehype-heading-slug
 
-[![build status](https://github.com/adhi-jp/rehype-heading-slug/actions/workflows/type-check.yml/badge.svg)](https://github.com/adhi-jp/rehype-heading-slug/actions)
-[![codecov](https://codecov.io/gh/adhi-jp/rehype-heading-slug/branch/main/graph/badge.svg?token=FXHPHX9G66)](https://codecov.io/gh/adhi-jp/rehype-heading-slug)
+[![build status](https://github.com/adhi-jp/rehype-heading-slug/actions/workflows/ci.yml/badge.svg)](https://github.com/adhi-jp/rehype-heading-slug/actions)
 [![npm version](https://img.shields.io/npm/v/rehype-heading-slug.svg)](https://www.npmjs.com/package/rehype-heading-slug)
+[![codecov](https://codecov.io/gh/adhi-jp/rehype-heading-slug/branch/main/graph/badge.svg?token=FXHPHX9G66)](https://codecov.io/gh/adhi-jp/rehype-heading-slug)
 [![bundle size](https://deno.bundlejs.com/?q=rehype-heading-slug&badge)](https://bundlejs.com/?q=rehype-heading-slug)
 
 A [rehype](https://github.com/rehypejs/rehype) plugin that automatically adds `id` attributes to heading elements (`<h1>`–`<h6>`). This plugin utilizes [github-slugger](https://github.com/Flet/github-slugger) and supports explicit slug notation, Unicode normalization, handling of duplicates and invalid slugs, and provides flexible strategies for managing existing `id` attributes and empty headings.
