@@ -37,6 +37,7 @@
   "packageManager": "pnpm@10.11.1",
   "scripts": {
     "check": "tsc --noEmit",
+    "check:strict": "tsc --noEmit --skipLibCheck false",
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",

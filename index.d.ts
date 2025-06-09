@@ -1,4 +1,6 @@
 import type { Root } from "hast";
+import type { RehypeHeadingSlugOptions } from "./lib/types.d.ts";
+
 export type {
   HeadingLevel,
   HeadingElement,
