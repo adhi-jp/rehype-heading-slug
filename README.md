@@ -3,7 +3,6 @@
 [![build status](https://github.com/adhi-jp/rehype-heading-slug/actions/workflows/ci.yml/badge.svg)](https://github.com/adhi-jp/rehype-heading-slug/actions)
 [![npm version](https://img.shields.io/npm/v/rehype-heading-slug.svg)](https://www.npmjs.com/package/rehype-heading-slug)
 [![codecov](https://codecov.io/gh/adhi-jp/rehype-heading-slug/graph/badge.svg?token=CWRZR3NPN3)](https://codecov.io/gh/adhi-jp/rehype-heading-slug)
-[![bundle size](https://deno.bundlejs.com/?q=rehype-heading-slug&badge)](https://bundlejs.com/?q=rehype-heading-slug)
 
 A [rehype](https://github.com/rehypejs/rehype) plugin that automatically adds `id` attributes to heading elements (`<h1>`–`<h6>`). This plugin utilizes [github-slugger](https://github.com/Flet/github-slugger) and supports explicit slug notation, Unicode normalization, handling of duplicates and invalid slugs, and provides flexible strategies for managing existing `id` attributes and empty headings.
 
@@ -113,7 +112,7 @@ All options are optional:
 | `assignIdToEmptyHeading` | boolean | `false`                                  | Assign an `id` to empty headings (`true` or `false`). If `true`, assigns ids like `h2-1`, `h3-2`, etc.               |
 | `strictSlugRegex`        | boolean | `false`                                  | If `true`, require that `slugRegex` contains a capture group. Throws if not.                                         |
 
-For full details, refer to [lib/types.d.ts](./lib/types.d.ts).
+For full details, refer to [lib/index.d.ts](./lib/index.d.ts).
 
 ## Security
 
