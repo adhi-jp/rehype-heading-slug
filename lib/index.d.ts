@@ -34,8 +34,9 @@ export type ExistingIdHandling = "always" | "never" | "explicit" | "error";
  */
 export interface RehypeHeadingSlugOptions {
   /**
-   * Regular expression for matching valid slugs.
-   * @default /^[a-zA-Z0-9-_]+$/
+   * Regular expression for matching explicit slug notation at end of heading text.
+   * Must contain a capture group for the slug when strictSlugRegex is true.
+   * @default /\{#([a-zA-Z0-9_\-\u00C0-\uFFFF]+)\}$/
    */
   slugRegex?: RegExp;
 
@@ -106,7 +107,7 @@ export interface RehypeHeadingSlugOptions {
  * @returns The transformer function
  */
 declare function rehypeHeadingSlug(
-  options?: RehypeHeadingSlugOptions,
+  options?: RehypeHeadingSlugOptions | null,
 ): Transformer<Root, Root>;
 
 export default rehypeHeadingSlug;
