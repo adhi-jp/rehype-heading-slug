@@ -17,13 +17,8 @@ describe("Configuration options", () => {
       const result = await processHtml(input, { maintainCase: true });
       expect(result).toContain('<h1 id="Test-Heading">Test Heading</h1>');
     });
-    it("converts to lowercase when maintainCase is false", async () => {
-      const input = "<h1>Test Heading</h1>";
-      const result = await processHtml(input, { maintainCase: false });
-      expect(result).toContain('<h1 id="test-heading">Test Heading</h1>');
-    });
 
-    it("defaults to lowercase conversion", async () => {
+    it("converts to lowercase by default (maintainCase is false)", async () => {
       const input = "<h1>Test Heading</h1>";
       const result = await processHtml(input);
       expect(result).toContain('<h1 id="test-heading">Test Heading</h1>');

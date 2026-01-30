@@ -26,8 +26,12 @@ describe("Error handling", () => {
     });
   });
 
-  describe("Option validation errors", () => {
-    it("throws TypeError for non-object options", async () => {
+  describe("Option validation", () => {
+    it("accepts no arguments (undefined options) without throwing", () => {
+      expect(() => rehypeHeadingSlug()).not.toThrow();
+    });
+
+    it("throws TypeError for non-object options", () => {
       expect(() => rehypeHeadingSlug(123)).toThrow(TypeError);
       expect(() => rehypeHeadingSlug("str")).toThrow(TypeError);
     });
