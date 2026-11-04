@@ -21,6 +21,13 @@ export type DuplicateSlugHandling = "numbering" | "error";
 export type InvalidSlugHandling = "convert" | "error";
 
 /**
+ * How to handle a `pattern` that has no capture group.
+ * - 'wrap': Wrap the whole pattern in a capture group
+ * - 'error': Throw an error
+ */
+export type MissingCaptureGroupHandling = "wrap" | "error";
+
+/**
  * How to handle existing id attributes on headings.
  * - 'always': Always override existing ids
  * - 'never': Never override existing ids
@@ -34,11 +41,18 @@ export type ExistingIdHandling = "always" | "never" | "explicit" | "error";
  */
 export interface RehypeHeadingSlugOptions {
   /**
-   * Regular expression for matching explicit slug notation at end of heading text.
-   * Must contain a capture group for the slug when strictSlugRegex is true.
+   * Regular expression matching the explicit slug notation at the end of the
+   * heading text. The first capture group is used as the slug. Regex flags are
+   * ignored because the pattern is always anchored to the end of the text.
    * @default /\{#([a-zA-Z0-9_\-\u00C0-\uFFFF]+)\}$/
    */
-  slugRegex?: RegExp;
+  pattern?: RegExp;
+
+  /**
+   * How to handle a `pattern` that has no capture group.
+   * @default 'wrap'
+   */
+  missingCaptureGroupHandling?: MissingCaptureGroupHandling;
 
   /**
    * Preserve case when generating slugs.
@@ -86,8 +100,17 @@ export interface RehypeHeadingSlugOptions {
   assignIdToEmptyHeading?: boolean;
 
   /**
-   * Enable strict slug regex group handling.
-   * @default false
+   * Regular expression for matching explicit slug notation.
+   * @deprecated Use `pattern` instead. Ignored when `pattern` is also set.
+   */
+  slugRegex?: RegExp;
+
+  /**
+   * Require `slugRegex` to contain a capture group.
+   * `true` maps to `missingCaptureGroupHandling: 'error'` and `false` maps to
+   * `missingCaptureGroupHandling: 'wrap'`.
+   * @deprecated Use `missingCaptureGroupHandling` instead. Ignored when
+   * `missingCaptureGroupHandling` is also set.
    */
   strictSlugRegex?: boolean;
 }
@@ -101,7 +124,7 @@ export interface RehypeHeadingSlugOptions {
  * - Unicode character normalization (optional)
  * - Configurable duplicate and invalid slug handling
  * - Flexible whitespace and existing id handling
- * - Strict or non-strict slug regex group handling
+ * - Configurable handling of patterns without a capture group
  *
  * @param options - Plugin configuration options
  * @returns The transformer function
