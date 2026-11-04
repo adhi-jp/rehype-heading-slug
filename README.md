@@ -100,21 +100,33 @@ Assigns `id` attributes to heading elements (`<h1>`–`<h6>`), supporting explic
 
 All options are optional:
 
-| Name                          | Type    | Default                                  | Description                                                                                                                |
-| ----------------------------- | ------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `pattern`                     | RegExp  | `/\{#([a-zA-Z0-9_\-\u00C0-\uFFFF]+)\}$/` | Regular expression matching explicit slug notation at the end of heading text. The first capture group is used as the slug |
-| `missingCaptureGroupHandling` | string  | `'wrap'`                                 | Strategy when `pattern` has no capture group: `'wrap'` (wrap the whole pattern) or `'error'` (throw an error)              |
-| `maintainCase`                | boolean | `false`                                  | Maintain original case in slugs (`true`) or convert to lowercase (`false`)                                                 |
-| `duplicateSlugHandling`       | string  | `'numbering'`                            | Strategy for duplicate slugs: `'numbering'` (suffix with numbers) or `'error'` (throw an error)                            |
-| `invalidSlugHandling`         | string  | `'convert'`                              | Strategy for invalid explicit slugs: `'convert'` (auto-fix) or `'error'`                                                   |
-| `normalizeUnicode`            | boolean | `false`                                  | Normalize Unicode characters (e.g., `é` to `e`)                                                                            |
-| `trimWhitespace`              | boolean | `true`                                   | Trim whitespace from headings and slugs                                                                                    |
-| `existingIdHandling`          | string  | `'explicit'`                             | Manage existing `id` attributes: `'always'`, `'never'`, `'explicit'` (overwrite only if explicit slug), or `'error'`       |
-| `assignIdToEmptyHeading`      | boolean | `false`                                  | Assign an `id` to empty headings (`true` or `false`). If `true`, assigns ids like `h2-1`, `h3-2`, etc.                     |
+| Name                          | Type    | Default                                  | Description                                                                                                                                                                                                                                          |
+| ----------------------------- | ------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pattern`                     | RegExp  | `/\{#([a-zA-Z0-9_\-\u00C0-\uFFFF]+)\}$/` | Regular expression matching explicit slug notation at the end of the heading text. The first capture group is the slug. See [Explicit slug notation](#explicit-slug-notation)                                                                        |
+| `missingCaptureGroupHandling` | string  | `'wrap'`                                 | Strategy when `pattern` has no capture group: `'wrap'` (wrap the whole pattern) or `'error'` (throw an error)                                                                                                                                        |
+| `maintainCase`                | boolean | `false`                                  | Maintain original case in slugs (`true`) or convert to lowercase (`false`). Applies to generated and explicit slugs alike                                                                                                                            |
+| `duplicateSlugHandling`       | string  | `'numbering'`                            | Strategy for duplicate slugs: `'numbering'` (suffix with numbers) or `'error'` (throw an error). Ids kept because of `existingIdHandling` count as taken                                                                                             |
+| `invalidSlugHandling`         | string  | `'convert'`                              | Strategy for invalid explicit slugs: `'convert'` (auto-fix with github-slugger) or `'error'` (throw an error). A slug is invalid when the notation does not match `pattern` or the slug contains characters other than letters, digits, `-`, and `_` |
+| `normalizeUnicode`            | boolean | `false`                                  | Normalize Latin-based accented characters in generated slugs (e.g., `é` to `e`, `ø` to `o`, `ß` to `ss`). Other scripts are preserved; explicit slugs are never normalized                                                                           |
+| `trimWhitespace`              | boolean | `true`                                   | Remove the whitespace around the explicit slug notation together with the notation, and collapse runs of whitespace in the heading text to a single `-` when generating a slug. The heading text itself is left untouched                            |
+| `existingIdHandling`          | string  | `'explicit'`                             | Manage existing `id` attributes: `'always'`, `'never'`, `'explicit'` (overwrite only if explicit slug), or `'error'`. An empty `id=""` counts as no id                                                                                               |
+| `assignIdToEmptyHeading`      | boolean | `false`                                  | Assign ids like `h2-1`, `h3-2` (counted per level and per document) to headings without text, or whose text yields an empty slug                                                                                                                     |
 
 Options shared with [rehype-slug-link](https://github.com/adhi-jp/rehype-slug-link) (`pattern`, `missingCaptureGroupHandling`, `invalidSlugHandling`, `maintainCase`, and `normalizeUnicode`) use the same names and accepted values in both plugins.
 
 For full details, refer to [lib/index.d.ts](./lib/index.d.ts).
+
+#### Explicit slug notation
+
+- The notation must be at the end of the heading text; `pattern` is anchored there automatically, so a trailing `$` is optional. The `i`, `s`, `u`, and `v` flags are honoured, `g`, `m`, and `y` are ignored.
+- The default `{#slug}` notation stays recognised next to a custom `pattern`.
+- Notation inside `<code>`, `<kbd>`, `<pre>`, `<samp>`, and `<tt>` is left alone, so headings can document the syntax itself. The text of those elements still contributes to generated slugs.
+- Explicit slugs go through github-slugger like generated ones (lowercased unless `maintainCase` is set, punctuation removed), then through duplicate handling.
+- If the slug would be empty (for example a heading consisting only of punctuation), the heading is treated like an empty heading.
+
+#### Errors
+
+Invalid options throw a `TypeError`. Problems with the document (an invalid or duplicate slug, or an existing id in `'error'` mode) throw an `Error`. All messages start with `rehype-heading-slug:`.
 
 #### Deprecated options
 
