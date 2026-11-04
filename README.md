@@ -69,7 +69,7 @@ This will produce:
 <h3 id="custom-slug">Explicit</h3>
 ```
 
-> **Note:** MDX does not allow curly braces (`{}`) within headings. If you use MDX, configure a custom slug format via the `slugRegex` option.
+> **Note:** MDX does not allow curly braces (`{}`) within headings. If you use MDX, configure a custom slug format via the `pattern` option.
 
 ### MDX Compatibility Example
 
@@ -79,11 +79,11 @@ To avoid MDX parse errors, you can use a different slug notation, such as `[#cus
 import { rehype } from "rehype";
 import rehypeHeadingSlug from "rehype-heading-slug";
 
-const mdxSlugRegex = /\s*\[#([A-Za-z0-9\-_]+)\]\s*$/;
+const mdxPattern = /\s*\[#([A-Za-z0-9\-_]+)\]\s*$/;
 
 const file = await rehype()
   .data("settings", { fragment: true })
-  .use(rehypeHeadingSlug, { slugRegex: mdxSlugRegex })
+  .use(rehypeHeadingSlug, { pattern: mdxPattern })
   .process("<h2>My heading [#my-slug]</h2>");
 
 console.log(String(file));
@@ -100,19 +100,30 @@ Assigns `id` attributes to heading elements (`<h1>`–`<h6>`), supporting explic
 
 All options are optional:
 
-| Name                     | Type    | Default                                  | Description                                                                                                          |
-| ------------------------ | ------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `slugRegex`              | RegExp  | `/\{#([a-zA-Z0-9_\-\u00C0-\uFFFF]+)\}$/` | Regular expression matching explicit slug notation                                                                   |
-| `maintainCase`           | boolean | `false`                                  | Maintain original case in slugs (`true`) or convert to lowercase (`false`)                                           |
-| `duplicateSlugHandling`  | string  | `'numbering'`                            | Strategy for duplicate slugs: `'numbering'` (suffix with numbers) or `'error'` (throw an error)                      |
-| `invalidSlugHandling`    | string  | `'convert'`                              | Strategy for invalid explicit slugs: `'convert'` (auto-fix) or `'error'`                                             |
-| `normalizeUnicode`       | boolean | `false`                                  | Normalize Unicode characters (e.g., `é` to `e`)                                                                      |
-| `trimWhitespace`         | boolean | `true`                                   | Trim whitespace from headings and slugs                                                                              |
-| `existingIdHandling`     | string  | `'explicit'`                             | Manage existing `id` attributes: `'always'`, `'never'`, `'explicit'` (overwrite only if explicit slug), or `'error'` |
-| `assignIdToEmptyHeading` | boolean | `false`                                  | Assign an `id` to empty headings (`true` or `false`). If `true`, assigns ids like `h2-1`, `h3-2`, etc.               |
-| `strictSlugRegex`        | boolean | `false`                                  | If `true`, require that `slugRegex` contains a capture group. Throws if not.                                         |
+| Name                          | Type    | Default                                  | Description                                                                                                                |
+| ----------------------------- | ------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `pattern`                     | RegExp  | `/\{#([a-zA-Z0-9_\-\u00C0-\uFFFF]+)\}$/` | Regular expression matching explicit slug notation at the end of heading text. The first capture group is used as the slug |
+| `missingCaptureGroupHandling` | string  | `'wrap'`                                 | Strategy when `pattern` has no capture group: `'wrap'` (wrap the whole pattern) or `'error'` (throw an error)              |
+| `maintainCase`                | boolean | `false`                                  | Maintain original case in slugs (`true`) or convert to lowercase (`false`)                                                 |
+| `duplicateSlugHandling`       | string  | `'numbering'`                            | Strategy for duplicate slugs: `'numbering'` (suffix with numbers) or `'error'` (throw an error)                            |
+| `invalidSlugHandling`         | string  | `'convert'`                              | Strategy for invalid explicit slugs: `'convert'` (auto-fix) or `'error'`                                                   |
+| `normalizeUnicode`            | boolean | `false`                                  | Normalize Unicode characters (e.g., `é` to `e`)                                                                            |
+| `trimWhitespace`              | boolean | `true`                                   | Trim whitespace from headings and slugs                                                                                    |
+| `existingIdHandling`          | string  | `'explicit'`                             | Manage existing `id` attributes: `'always'`, `'never'`, `'explicit'` (overwrite only if explicit slug), or `'error'`       |
+| `assignIdToEmptyHeading`      | boolean | `false`                                  | Assign an `id` to empty headings (`true` or `false`). If `true`, assigns ids like `h2-1`, `h3-2`, etc.                     |
+
+Options shared with [rehype-slug-link](https://github.com/adhi-jp/rehype-slug-link) (`pattern`, `missingCaptureGroupHandling`, `invalidSlugHandling`, `maintainCase`, and `normalizeUnicode`) use the same names and accepted values in both plugins.
 
 For full details, refer to [lib/index.d.ts](./lib/index.d.ts).
+
+#### Deprecated options
+
+The following options are still accepted for backward compatibility but will be removed in a future major version. Using one emits a `DeprecationWarning` once. If both a deprecated option and its replacement are given, the replacement takes precedence.
+
+| Deprecated        | Replacement                                                            |
+| ----------------- | ---------------------------------------------------------------------- |
+| `slugRegex`       | `pattern`                                                              |
+| `strictSlugRegex` | `missingCaptureGroupHandling` (`true` → `'error'`, `false` → `'wrap'`) |
 
 ## Security
 
